@@ -29,7 +29,7 @@ export class UsersController {
     }
 
     @Get('documento/:docNumber')
-    findDocumento(@Param('docNumber', ParseIntPipe) docNumber: string){
+    findDocumento(@Param('docNumber') docNumber: string){
         return this.usersService.findByDocumento(docNumber);
     }
 
