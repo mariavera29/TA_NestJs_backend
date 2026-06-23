@@ -2,7 +2,6 @@ import { DataSource } from 'typeorm';
 import config from '../config';
 import * as dotenv from 'dotenv';
 import { enviroments } from '../enviroments';
-
 import { join } from 'path';
 
 const envFile = enviroments[process.env.NODE_ENV as keyof typeof enviroments] || enviroments.dev;
@@ -16,8 +15,11 @@ export const AppDataSource = new DataSource({
   username: configuration.dataBase.user,
   password: configuration.dataBase.password,
   database: configuration.dataBase.name,
-  synchronize: true,
+  synchronize: true, // Lo dejamos en true para que cree las tablas localmente al correr el seed
   logging: true,
   entities: [join(__dirname, '..', '**', '*.entity.{ts,js}')],
   migrations: [join(__dirname, 'migrations', '*.{ts,js}')],
+
+  // CONTROL DE SSL INTELIGENTE 
+  ssl: configuration.dataBase.host !== 'localhost' ? { rejectUnauthorized: false } : false,
 });
